@@ -3,7 +3,7 @@ def bin_search(trees:list, key:int) -> int:
     n = len(trees)
     start = 1  # tree[0]가 아니라 가장 짧은 길이인 1로 두어야 한다.
     end = trees[n-1] # 가장 높은 tree
-    result =
+    result = 0
 
     while start <= end:
         h = (start + end) // 2
