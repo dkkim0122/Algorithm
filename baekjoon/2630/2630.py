@@ -1,56 +1,49 @@
-white = 0
-blue = 0
-
-def recur(a: list, N: list) -> list:
-    global white, blue
-    total = 0
-    size  = N//2
-
-    # 0이면 끝
+def recur(x: int, y: int, N: int) -> None:
+    # 0이면 끝인데, 밑에 판단 기준(모든 원소의 합)을 넣어뒀기 때문에 
+    # N == 0 까지 안 간다.
     if N == 0:
         return
+
     # 판단
-    # 모든 요소 다 더해봐서 
-    for i in range(N):
-        total += sum(a[i])
+    # 굳이 원래의 리스트를 분할하지 않고, 그 좌표만 변경하면서 본다.
+    # 원래처럼 새로 인덱스를 설정해줘야 하는 방법은
+    # 새로운 리스트를 계속 설정해줘야 한다.
 
-    # 0이면 다 흰색 N*N이면 다 파란색
-    if total == 0:
-        white += 1
-        return
-    elif total == N*N:
-        blue += 1
-        return
+    # 모든 요소를 다 더해줄 필요가 없다. 
+    # 색종이의 가장 첫 색깔과 다른 것이 있는지를 찾으면 된다.
+    color = paper[x][y]
 
-    a_quar1 = []
-    a_quar2 = []
-    a_quar3 = []
-    a_quar4 = []
+    for i in range(x, x + N):  # 첫 시작점에서 N 만큼
+        for j in range(y, y + N):
+            if color != paper[i][j]:  # 다른 게 하나라도 있으면
+                recur(x, y, N//2)
+                recur(x, y + N//2, N//2)    # 각 사분면의 시작점을 x, y로.
+                recur(x + N//2, y, N//2)
+                recur(x + N//2, y + N//2, N//2)
+                return  # 여기까지만 해 주면 된다. 재귀 끝나고 밑으로 내려가는거 방지
+    
+    # 이 밑은 다른 게 하나도 없는 애들을 위해서
+    # 만약 다 같은 색이다 : 종이의 처음 색깔과 동일하다.
+    if color == 0:
+        result.append(0)
+    else:
+        result.append(1)
 
-    # 4개로 나눈다.
-    # 1 사분면 
-    for i in range(size):
-        a_quar1.append(a[i][:size])
-    for i in range(size):
-        a_quar2.append(a[i][size:N])
-    for i in range(size, N):
-        a_quar3.append(a[i][:size])
-    for i in range(size, N):
-        a_quar4.append(a[i][size:N])
+result = []
 
-    recur(a_quar1, N//2)
-    recur(a_quar2, N//2)
-    recur(a_quar3, N//2)
-    recur(a_quar4, N//2)
+lst = [2**i for i in range(1,8)]
 
+while True:
+    N = int(input())
+    if N in lst:
+        break
 
-N = int(input())
-
-a = [None] * N
+paper = [None] * N
 
 for i in range(N):
-    a[i] = list(map(int, input().split()))
+    paper[i] = list(map(int, input().split()))
 
-recur(a, N)
+recur(0, 0, N)
 
-print(white, blue)
+print(result.count(0))
+print(result.count(1))
