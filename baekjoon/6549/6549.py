@@ -53,8 +53,7 @@ def max_square(left, right):
 while True:
     lst = list(map(int, sys.stdin.readline().split()))
     n = lst[0]
-    histo = lst[1:]
 
     if lst[0] == 0:
         break
-    print(max_square(1, len(histo)))
+    print(max_square(1, len(lst)-1))
