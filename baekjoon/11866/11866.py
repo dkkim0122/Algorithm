@@ -1,21 +1,21 @@
 import sys
+ 
 input = sys.stdin.readline
-from collections import deque
-
+ 
 n, k = map(int, input().split())
-que = deque(range(1,n+1))
+que = list(range(1, n + 1))
 joseph_list = []
-count = 0   # 인덱스의 개념이 아니다
+front = 0
+no = n
 
-while que:
-    count += 1
-    if count % k == 0:
-        x = que.popleft()
-        joseph_list.append(x)
+while no > 0:
+    if front % k == k-1:
+        joseph_list.append(que[front])
+        no -= 1
     else:
-        x = que.popleft()
-        que.append(x)
-    print(que, count)
+        que.append(que[front])
+
+    front += 1
 
 print('<', end='')
 for i in range(n-1):
