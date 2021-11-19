@@ -28,28 +28,15 @@ def bfs(edges, start_node):
 
 
 node_num, edge_num, start_node = map(int, input().split())
-# edges = {}
 
-# for i in range(edge_num):
-#     node1, node2 = map(int, input().split())
-#     if node1 not in edges:
-#         edges[node1] = [node2]
-#     else:
-#         edges[node1].append(node2)
-    
-#     if node2 not in edges:
-#         edges[node2] = [node1]
-#     else:
-#         edges[node2].append(node1)
-    
-edges = collections.defaultdict(list)  # 딕셔너리의 기본값을 list로 초기화시켜준다.
+edges = [[]*node_num for _ in range(node_num + 1)]
 
 for i in range(edge_num):
     node1, node2 = map(int, input().split())
     edges[node1].append(node2)
     edges[node2].append(node1)
-
-edges.sort()
+    edges[node1].sort()  # sort()를 해 주는 이유가 무엇이지....
+    edges[node2].sort()
 
 dfs_list = dfs_recur(edges, start_node, [])
 bfs_list = bfs(edges, start_node)
