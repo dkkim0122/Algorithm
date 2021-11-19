@@ -5,32 +5,31 @@ from collections import deque
 input = sys.stdin.readline
 
 num_node, num_edge = map(int, input().split())
-graph = collections.defaultdict(list)
+graph=[[] for i in range(num_node + 1)]
 
-for i in range(num_edge):
-    node1, node2 = map(int, input().split())
+for i in range(num_node):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
 
-    graph[node1].append(node2)
-    graph[node2].append(node1)
+visited=[0]*(num_node + 1)
 
-def dfs(graph, start_node):
-    visited = []
+def bfs(start_node):
     need_visited = deque()
     need_visited.append(start_node)
 
     while need_visited:
         node = need_visited.popleft()
-        if node not in visited:
-            visited.append(node)
-            need_visited.extend(graph[node])
-    
-    return visited
+        for i in graph[node]:
+            if visited[i] == 0:
+                visited[i] = 1
+                need_visited.append(i)
 
-count = 1
-result = dfs(graph, next(iter(graph)))
+
+count = 0
 for i in range(1, num_node+1):
-    if i not in result:
-        result.extend(dfs(graph, i))
+    if visited[i] == 0:
+        bfs(i)
         count += 1
 
 print(count)
