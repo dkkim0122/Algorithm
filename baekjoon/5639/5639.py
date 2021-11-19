@@ -1,36 +1,41 @@
 import sys
+sys.setrecursionlimit(10**8)
+
 input = sys.stdin.readline
 
-# 후위 순환
-def postorder(root):
-    if root != '.':
-        postorder(tree[root][0])
-        postorder(tree[root][1])
-        print(root)
 
-nodes = []
-tree = {}
+# 후위 순환 : start와 end는 인덱스
+def postorder(start, end):
+    if start > end:
+        return
+    
+    # 루트 노드 찾기
+    root = preorder_list[start]
+    idx = start + 1
+
+    # 서브 트리를 나누기 위해 루트 노드의 오른쪽 자식을 찾는다
+    while idx <= end:
+        if preorder_list[idx] > root:
+            break
+        idx += 1
+
+    
+    # postorder 출력하기
+    postorder(start+1, idx-1) # 왼쪽 서브트리
+
+    postorder(idx, end) # 오른쪽 서브트리
+
+    print(root) # 루트
+
+
+preorder_list = []
 
 # 입력
 while True:
     node = input().strip()
     if node =='':
         break
-    nodes.append(int(node))
+    preorder_list.append(int(node))
 
-# 트리를 만들어라
-tree[nodes[0]] = ['.','.']
 
-for i in range(1, len(nodes)):
-    tree[nodes[i]] = ['.','.']
-    if nodes[i] < nodes[i-1]:
-        tree[nodes[i-1]][0] = nodes[i]
-    else:
-        j = i-2
-        while nodes[i] > nodes[j]:
-            if j == -1: # 루트 노드의 오른쪽 값을 위해
-                break
-            j -= 1
-        tree[nodes[j+1]][1] = nodes[i]
-
-postorder(nodes[0])
+postorder(0, len(preorder_list)-1)
