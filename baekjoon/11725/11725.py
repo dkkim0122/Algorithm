@@ -5,25 +5,24 @@ import collections
 input = sys.stdin.readline
 
 def dfs(tree, start):
-    visited = []
     need_visited = deque([start])
 
     while need_visited:
         node = need_visited.pop()
-        if node not in visited:
-            visited.append(node)
-            need_visited.extend(tree[node])
-            for child in tree[node]:
-                if parent[child] == 0:
-                    parent[child] = node
+        for child in tree[node]:
+            need_visited.append(child)
+            if parents[child] == 0:
+                parents[child] = node
+            tree[child].remove(node)
+            
+    return parents
 
-    return visited
 
-
-tree = collections.defaultdict(list)
 node_num = int(input())
-parent = [0] * (node_num + 1)
-parent[1] = 1
+
+tree = [[]*(node_num+1) for _ in range(node_num+1)]
+parents = [0] * (node_num + 1)
+parents[1] = 1
 
 
 for i in range(node_num-1):
@@ -33,5 +32,5 @@ for i in range(node_num-1):
     
 dfs(tree, 1)
 
-for parent_node in parent[2:]:
-    print(parent_node)
+for parent in parents[2:]:
+    print(parent)
