@@ -49,11 +49,12 @@ year = 0
 
 while True:
     year += 1
+    
     if all_melt():
         print(0)
         break
-    
-    new_ice = deepcopy(iceberg) 
+
+    new_ice = [[0]*col for _ in range(row)]
     # 빙산이 깎일 때, 기존의 빙산이랑 비교해야지, 
     # 지금 깎이고 있는 현재 빙산을 기준으로 삼으면 안 된다.
 
@@ -63,17 +64,14 @@ while True:
         for c in range(col):
             if iceberg[r][c] != 0:
                 num = check(iceberg, r,c)
-                if new_ice[r][c] - num <= 0:
-                    new_ice[r][c] = 0
-                else:
-                    new_ice[r][c] -= num
+                new = iceberg[r][c] - num
+                new_ice[r][c] = new if new > 0 else 0
 
-    iceberg = new_ice # 다 깎였으면 업데이트
+    iceberg = deepcopy(new_ice) # 다 깎였으면 업데이트
 
     visited_ice = deepcopy(iceberg)
-    
-    count = 0 # 빙산 요소의 크기
 
+    count = 0 # 빙산 요소의 개수
     # 이어져 있는 연결요소들의 개수를 구하기 위해 dfs 사용
     for r in range(row):
         for c in range(col):
@@ -82,8 +80,6 @@ while True:
                 dfs(r,c)
                 count += 1
 
-    if count > 1:
+    if count >= 2:
         print(year)
-        break
-
-
+        break   
