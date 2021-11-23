@@ -7,28 +7,24 @@ def water():
         cy, cx = next_water.popleft()
         for i in range(4):
             ny, nx = cy+dy[i], cx+dx[i]
-            if 0<=ny<r and 0<=nx<c and forest[ny][nx]=='.':
-                new_forest[ny][nx] = '*'
-    print(new_forest)
+            if 0<=ny<r and 0<=nx<c and water_move[ny][nx]==0:
+                water_move[ny][nx] = water_move[cy][cx] + 1
+                next_water.append([ny, nx])
 
-    return new_forest
-                 
 
-def move():
-    next_place = []
-    while next_move:
-        cy, cx = next_water.popleft()
-        forest[cy][cx] = '.'
+def move(start):
+    start_y ,start_x = start
+    next_place = deque([[start_y ,start_x]])
+
+    while next_place:
+        cy, cx = next_place.popleft()
+        
         for i in range(4):
             ny, nx = cy+dy[i], cx+dx[i]
-            if 0<=ny<r and 0<=nx<c and forest[ny][nx]!='X':
-                if forest[ny][nx] =='*':
-                    pass
-                elif forest[ny][nx] == '.':
-                    next_place.append([ny,nx])
-                    forest[ny][nx] = 'S'
-
-    return next_place
+            if 0<=ny<r and 0<=nx<c and hedge_move[ny][nx] == 0:
+                if hedge_move[cy][cx] + 1 < water_move[ny][nx]:
+                    hedge_move[ny][nx] = hedge_move[cy][cx] + 1
+                    next_place.append([ny, nx])
 
 
 if __name__=='__main__':
@@ -43,48 +39,47 @@ if __name__=='__main__':
         string = input().split()
         forest[i] = list(string[0])
 
-    
+    water_move = [[0]*c for i in range(r)]
+    hedge_move = [[0]*c for i in range(r)]
 
     next_water = deque()
-    hedge = 0
-    beaver = 0
-    count = 0
+    hedge_start = [0,0]
+    beaver = [0,0]
 
-    while True:
-        for i in range(r):
-            for j in range(c):
-                if forest[i][j] == '*':
-                    next_water.append([i,j])
-                elif forest[i][j] == 'S':
-                    hedge = [i,j]
-                elif forest[i][j] == 'D':
-                    beaver = [i,j]
-        
-        print(next_water)
-        print(hedge)
-        print(beaver)
+    for i in range(r):
+        for j in range(c):
+            if forest[i][j] == '*':
+                water_move[i][j] = 1
+                next_water.append([i,j])
+            elif forest[i][j] == 'S':
+                hedge_move[i][j] = 1
+                hedge_start = [i,j]
+            elif forest[i][j] == 'D':
+                water_move[i][j] = sys.maxsize # 물이 있어도 안 잠긴다
+                beaver = [i,j] # 비버 집이 여기 있다
+            elif forest[i][j] == 'X':
+                water_move[i][j] = -1 # -1로 하면 나중에 고슴도치도 피해간다
 
-        # 물이 들이닥친다
-        new_forest = deepcopy(forest)
-        forest = water()
+    # print(water_move)    
+    # print(hedge_move)
+    # print(beaver)
 
-        print('first wave')
-        for i in forest:
-            print(i)
+    water()
+    # print(water_move)   
 
-        # 고슴도치가 움직인다
-        next_move = deque([hedge])
-        print(move)
-        next_move.append(move())
-        print('hedge moves')
-        print(next_move)
-        for i in forest:
-            print(i)
+    move(hedge_start)
+    # print(hedge_move)
 
+    beaver_y = beaver[0]
+    beaver_x = beaver[1]
+    max_time = 0
+    for row in hedge_move:
+        for point in row:
+            max_time = max(max_time, point)
+    
+    if hedge_move[beaver_y][beaver_x] == max_time: # 비버 집에 잘 도착했다
+        print(max_time-1)
+    else:
+        print('KAKTUS')
 
-        count += 1
-
-        if hedge == beaver:
-            print(count)
-            break
 
