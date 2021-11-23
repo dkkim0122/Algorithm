@@ -7,10 +7,10 @@ def water():
         cy, cx = next_water.popleft()
         for i in range(4):
             ny, nx = cy+dy[i], cx+dx[i]
-            if 0<=ny<r and 0<=nx<c and water_move[ny][nx]==0:
-                water_move[ny][nx] = water_move[cy][cx] + 1
-                next_water.append([ny, nx])
-
+            if 0<=ny<r and 0<=nx<c and water_move[ny][nx]==INF:
+                if ny != beaver_y and nx != beaver_x:
+                    water_move[ny][nx] = water_move[cy][cx] + 1
+                    next_water.append([ny, nx])
 
 def move(start):
     start_y ,start_x = start
@@ -32,6 +32,7 @@ if __name__=='__main__':
 
     dx = [0,1,0,-1] # 상,우,하,좌
     dy = [-1,0,1,0]
+    INF = sys.maxsize
     r, c = map(int, input().split())
 
     forest = [[] for _ in range(r)]
@@ -39,7 +40,7 @@ if __name__=='__main__':
         string = input().split()
         forest[i] = list(string[0])
 
-    water_move = [[0]*c for i in range(r)]
+    water_move = [[INF]*c for i in range(r)]
     hedge_move = [[0]*c for i in range(r)]
 
     next_water = deque()
@@ -55,13 +56,12 @@ if __name__=='__main__':
                 hedge_move[i][j] = 1
                 hedge_start = [i,j]
             elif forest[i][j] == 'D':
-                water_move[i][j] = sys.maxsize # 물이 있어도 안 잠긴다
                 beaver = [i,j] # 비버 집이 여기 있다
             elif forest[i][j] == 'X':
                 water_move[i][j] = -1 # -1로 하면 나중에 고슴도치도 피해간다
 
-    # print(water_move)    
-    # print(hedge_move)
+    beaver_y = beaver[0]
+    beaver_x = beaver[1]
     # print(beaver)
 
     water()
@@ -69,16 +69,18 @@ if __name__=='__main__':
 
     move(hedge_start)
     # print(hedge_move)
+    # print(f'water move = {water_move}') 
+    # print(f'hedge_move = {hedge_move}')
 
-    beaver_y = beaver[0]
-    beaver_x = beaver[1]
-    max_time = 0
-    for row in hedge_move:
-        for point in row:
-            max_time = max(max_time, point)
-    
-    if hedge_move[beaver_y][beaver_x] == max_time: # 비버 집에 잘 도착했다
-        print(max_time-1)
+
+    # max_time = 0
+    # for row in hedge_move:
+    #     for point in row:
+    #         max_time = max(max_time, point)
+
+    hedge_end = hedge_move[beaver_y][beaver_x]
+    if  hedge_end != INF: # 비버 집에 잘 도착했다
+        print(hedge_end-1)
     else:
         print('KAKTUS')
 
