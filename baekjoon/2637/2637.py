@@ -2,6 +2,18 @@
 # dp로 어떻게 풀지..?
 
 import sys
+from collections import deque
+
+def topology_sort():
+    while queue:
+        node = queue.popleft()
+        for adj in graph[node]:
+            start, end, cost = adj  # graph[start] = (start, end, cost)
+            costs_list[end] += costs_list[node]*cost  # cost 계산
+            indegree[end] -= 1
+            if indegree[end] == 0:
+                queue.append(end)
+
 
 if __name__=='__main__':
     input = sys.stdin.readline
@@ -9,25 +21,24 @@ if __name__=='__main__':
     node_num = int(input())
     edge_num = int(input())
 
-    dp = [[] for _ in range(node_num+1)]
-    lst = []
+    graph = [[] for _ in range(node_num + 1)]
+    indegree = [0] * (node_num + 1)
+    costs_list = [0] * (node_num + 1)
+    costs_list[node_num] = 1 # 완제품의 cost를 1로 잡고 시작
 
     for i in range(edge_num):
-        lst.append(list(map(int,input().split())))
+        start, end, num = map(int,input().split())
+        graph[start].append((start, end, num))
+        indegree[end]+=1
 
-    lst.sort()
-    # print(f'lst : {lst}')
+    queue = deque()
+    for i in range(1, node_num+1):
+        if indegree[i] == 0:
+            queue.append(i)
 
-    basic_parts = lst[0][0]-1
-    for i in range(1,basic_parts+1):
-        dp[i] = [i]
-    # print(f'dp : {dp}')
+    # print(queue)
+    topology_sort()
 
-    for i in range(edge_num):
-        idx, parts, num = lst[i]
-        for _ in range(num):
-            dp[idx].extend(dp[parts])
-        # print(f'idx: {idx} dp:{dp[idx]}')
-
-    for i in range(1,basic_parts+1):
-        print(f"{i} {dp[node_num].count(i)}")
+    for i in range(1,node_num+1):  # 그래프에서 indegree가 0인, 즉 기본 부품들
+        if graph[i] == []:
+            print(i, costs_list[i])
