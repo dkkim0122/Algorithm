@@ -7,16 +7,21 @@ input = sys.stdin.readline
 # a) [(i-1개의 물건이 가방에 있고 최대 무게가 j에서 i번째 물건의 무게를 뺀 값의 가치) + (i번째 물건의 가치)]와
 # b) [i-1개의 물건이 가방에 있고 최대 무게가 그대로 j]인 두 값 중 큰 것의 값과 같다.
 # 즉 dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight[i]]+value[i]).
-def knap_sack_recur(weight, value):
-    dp = [[0] * (limit_weight+1) for _ in range(num+1)]
-    for i in range(1, num+1):
-        for j in range(1, limit_weight+1):
-            if j >= weight[i]:
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight[i]] + value[i])
-            else:
-                dp[i][j] = dp[i-1][j]
+def ks_recur(n,m):
+    if n == 0 or m == 0:
+        return 0
 
-    return dp[num][limit_weight]
+    # 이미 계산한 값 다시 계산하지 말기
+    if dp[n-1][m-1] != -1:
+        return dp[n-1][m-1]
+
+    if m >= weight[n]:
+        dp[n-1][m-1] = \
+            max(ks_recur(n-1, m), ks_recur(n-1, m-weight[n]) + value[n])
+    else:
+        dp[n-1][m-1] = ks_recur(n-1,m)
+
+    return dp[n-1][m-1]
 
     
 if __name__=='__main__':
@@ -28,5 +33,7 @@ if __name__=='__main__':
         w, v = map(int, input().split())            
         weight[i] = w
         value[i] = v
+    
+    dp = [[-1] * (limit_weight) for _ in range(num)]
 
-    print(knap_sack_recur(weight, value))
+    print(ks_recur(num, limit_weight))
