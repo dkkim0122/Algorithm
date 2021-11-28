@@ -1,11 +1,10 @@
 import sys
-from types import SimpleNamespace
 input = sys.stdin.readline
 
 def find_min_jump(N: int, small_rocks: list) -> int:
     INF = sys.maxsize
-    max_speed = int((N*2)**0.5)+1
-    dp = [[INF]*(max_speed+1) for _ in range(N+1)] # 속도(열)는 max_speed까지만 찾아보면 된다. 
+    max_speed = int((N*2)**0.5)
+    dp = [[INF]*(max_speed+2) for _ in range(N+1)] # 속도(열)는 max_speed까지만 찾아보면 된다. 
     dp[1][0] = 0  # 1번 돌에 0의 속도로 도착하는 최소 횟수 0 : 처음 시작 지점
 
     # 갈 수 있는(small_rocks에 없는) 각 돌들에 대해서 도착 속도를 볼 것.
