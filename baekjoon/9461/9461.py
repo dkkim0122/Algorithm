@@ -6,14 +6,10 @@ def padovan(N):
         dp[N] = 1
         return 1
     
-    if N == 4 or N == 5:
-        dp[N] = 2
-        return 2
-    
     if dp[N] != 0:
         return dp[N]
     
-    dp[N] = padovan(N-1) + padovan(N-5)
+    dp[N] = padovan(N-2) + padovan(N-3)
     return dp[N]
 
 if __name__=='__main__':
