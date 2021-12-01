@@ -1,19 +1,39 @@
 import sys
 input = sys.stdin.readline
 
-if __name__=='__main__':
-    INF = sys.maxsize
-    city_num = int(input().strip())
+def check(lines):
+    for i in range(len(lines)):
+        for j in range(i,len(lines)):
+            if lines[i][1] > lines[j][1]:
+                dp[i] += 1
+                dp[j] += 1
+    return dp
 
-    roads = list(map(int, input().split()))
-    cities = list(map(int, input().split()))
+if __name__ == '__main__':
+    N = int(input().strip())
+    lines = [list(map(int, input().split())) for _ in range(N)]
 
-    cost = 0
-    min_cost = INF
-    for i in range(len(cities)-1):
-        if cities[i] < min_cost:
-            min_cost = cities[i]
-        cost += roads[i] * min_cost
 
-    print(cost)
+    lines.sort()
+
+    cnt = 0
+
+    while True:
+        dp = [0] * N
+
+        result = check(lines)
         
+        if result.count(0) == N:
+            break
+
+        max = 0
+        max_idx = 0
+        for idx, num in enumerate(result):
+            if num > max:
+                max = num
+                max_idx = idx
+
+        del lines[max_idx]
+        cnt += 1
+
+    print(cnt)
