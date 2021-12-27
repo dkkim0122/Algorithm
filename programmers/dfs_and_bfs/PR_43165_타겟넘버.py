@@ -3,8 +3,10 @@ sys.setrecursionlimit(10**6)
 
 def solution(numbers, target):
     result = []
+
     def dfs(count, total):
-        if count == len(numbers) - 1:
+        if count == len(numbers):
+            print(total)
             if total == target:
                 result.append(total)
             return
