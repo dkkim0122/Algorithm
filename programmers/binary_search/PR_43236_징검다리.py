@@ -34,7 +34,7 @@ def solution(distance, rocks, n):
         
         if count <= n:  # 돌을 기준보다 덜 빼도 최솟값을 만들 수 있다면 
             ans = mid   # 괜찮긴 한데
-            start = mid + 1   # 그래도 최솟값을 더 늘여보자.
+            start = mid + 1   # 그래도 최솟값을 더 늘여보자. 
         elif count > n:  # 주어진 기준보다 돌을 더 많이 빼야 한다면 최솟값이 너무 큰 것이다. 
             end = mid - 1
     
