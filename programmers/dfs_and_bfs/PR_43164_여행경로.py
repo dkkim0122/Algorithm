@@ -9,7 +9,7 @@ def solution(tickets):
         graph[start].append([end, 0])
     
     for value in graph.values():
-        value.sort(key = lambda x:x[0])
+        value.sort()
     
     return dfs(graph, tickets, 'ICN', ['ICN'])
     
@@ -29,5 +29,5 @@ def dfs(graph, tickets, start, route):
 
     return route
 
-tickets = [["ICN", "AOO"], ["AOO", "BOO"], ["BOO", "COO"], ["COO", "DOO"], ["DOO", "EOO"], ["EOO", "DOO"], ["DOO", "COO"], ["COO", "BOO"], ["BOO", "AOO"]]
+tickets = [["ICN", "AOO"], ["AOO", "BOO"], ["BOO", "COO"], ["COO", "BOO"], ["BOO", "AOO"]]
 print(solution(tickets))
