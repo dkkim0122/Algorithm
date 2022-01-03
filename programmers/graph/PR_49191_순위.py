@@ -1,21 +1,18 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 
 def solution(n, results):
-    win = defaultdict(list)  # 해당 노드가 이긴 노드
-    lose = defaultdict(list)  # 해당 노드가 진 노드
+    win = defaultdict(set)  # 해당 노드가 이긴 노드
+    lose = defaultdict(set)  # 해당 노드가 진 노드
 
     for winner, loser in results:
-        win[winner].append(loser)
-        lose[loser].append(winner)
-    
+        win[winner].add(loser)  
+        lose[loser].add(winner)
+
     for i in range(1, n+1):
-        for loser in win[i]:
-            win[i].extend(win[loser])
-            win[i] = list(set(win[i]))
-    for i in range(1, n+1):            
-        for winner in lose[i]:
-            lose[i].extend(lose[winner])
-            lose[i] = list(set(lose[i]))
+        for loser in win[i]:  # i에게 진 애들 : loser
+            lose[loser].update(lose[i])  # i를 이긴 애들은 역시 loser를 이겼다.
+        for winner in lose[i]: # i를 이긴 애들
+            win[winner].update(win[i])  # i한테 진 애들은 winner한테도 졌다.
 
     count = 0
     for i in range(1, n+1):
@@ -25,9 +22,6 @@ def solution(n, results):
     return count
 
 
-
-
-
 n = 5
-results = [[1, 2], [4, 5], [3, 4], [2, 3]]
+results = [[4, 3], [4, 2], [3, 2], [1, 2], [2, 5]]
 print(solution(n, results))
