@@ -9,13 +9,12 @@ def solution(N, number):
             if N == number:
                 return n
         
-        for i in range(2, n):
-            for j in range(1, i):
-                print(i, j, i-j)
-                Cal(dp[i], dp[j], dp[i-j])
-                dp[i] = list(set(dp[i]))
-            if number in dp[i]:
-                return i
+        for j in range(1, n):
+            print(n, j, n-j)
+            Cal(dp[n], dp[j], dp[n-j])
+            dp[n] = list(set(dp[n]))
+        if number in dp[n]:
+            return n
         n += 1
         
     return -1
@@ -34,6 +33,6 @@ def Cal(dp, dp1, dp2):
             dp.extend(cal(dp1[i], dp2[j]))
 
 N = 5
-number = 26
+number = 55
 
 print(solution(N, number))
