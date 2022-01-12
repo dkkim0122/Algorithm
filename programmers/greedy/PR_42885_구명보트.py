@@ -4,23 +4,20 @@ def solution(people, limit):
     people = deque(sorted(people))
     answer = 0
 
-    stack = []
-    count = 0
-    while people:
-        if count + people[0] <= limit:
-            person = people.popleft()
-            count += person
-            stack.append(person)
+    while len(people) >= 2:
+        if people[0] + people[-1] <= limit:
+            people.pop()
+            people.popleft()
         else:
-            answer += 1
-            count = 0
-            stack = []
+            people.pop()
+        answer += 1
 
-    answer += 1  # 마지막 구명보트
+    if people:
+        return answer + 1
+    else:
+        return answer
 
-    return answer
-
-people = [70, 80, 50]
+people = [70, 30, 30, 70]
 limit = 100
 
 print(solution(people, limit))
