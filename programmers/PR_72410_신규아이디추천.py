@@ -1,41 +1,26 @@
 from collections import deque
 
 def solution(new_id):
-    answer = ''
     unavailable = set("~!@#$%^&*()=+[{]}:?,<>/")
 
     result = []
-    result1 = []
-    result2 = []
-    result3 = []
 
-    # step 1, 2
-    new_id = deque(new_id)
-    for i, ch in enumerate(new_id):
-        if ord('A') <= ord(ch) <= ord('Z'):
-            new_id[i] = new_id[i].lower()
-        result.append(new_id[i])
+    # step 1
+    new_id = new_id.lower()
     
+    # step 2
+    for i in unavailable:
+        new_id = new_id.replace(i, '')
+
     # step 3
-    for i, ch in enumerate(result):
-        if result[i] in unavailable:
-            continue
-        result2.append(result[i]) 
-    result = result2
-    print(result)
+    while ".." in new_id:
+        new_id = new_id.replace('..', '.')
 
-    for i, ch in enumerate(result):
-        if i < len(result)-1 and result[i] == '.' and result[i+1] == '.':
-            continue
-        result3.append(result[i])
-    result = result3
-    print(result)
-
-
+    result = list(new_id) 
     # step 4
-    while result and result[0] == '.':
+    if result and result[0] == '.':
         result = result[1:]
-    while result and result[-1] == '.':
+    if result and result[-1] == '.':
         result.pop()
 
     # step 5
@@ -54,5 +39,5 @@ def solution(new_id):
 
     return ''.join(result)
 
-new_id = "....[]....a."
+new_id = "..!@$..[]....a."
 print(solution(new_id))
