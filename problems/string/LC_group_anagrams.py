@@ -10,6 +10,6 @@ class Solution:
             string = strs.pop()
             temp = ''.join(sorted(string))
             dict[temp].append(string)
-    
+
         return list(dict.values())
     
