@@ -12,3 +12,4 @@ class Solution:
             dict[temp].append(string)
     
         return list(dict.values())
+    
