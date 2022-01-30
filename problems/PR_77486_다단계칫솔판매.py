@@ -10,7 +10,7 @@ def solution(enroll, referral, seller, amount):
         parent_list[person] = referral[i]
 
     for i, person in enumerate(seller):
-        sell_list[person] = amount[i] * 100
+        sell_list[person].append(amount[i] * 100)
     
     def find(person, cost):
         if person == '-':
@@ -18,7 +18,7 @@ def solution(enroll, referral, seller, amount):
             return 
 
         parent = parent_list[person]
-        for_parent = cost // 10
+        for_parent = int(cost * 0.1)
         if for_parent != 0:
             money[person] += cost - for_parent
             find(parent, for_parent)
@@ -27,7 +27,8 @@ def solution(enroll, referral, seller, amount):
         return 
 
     for person, cost in sell_list.items():
-        find(person, cost)
+        for cost_ in cost:
+            find(person, cost_)
     
     answer = []
     for person in enroll:
@@ -40,7 +41,7 @@ def solution(enroll, referral, seller, amount):
 
 enroll = ["john", "mary", "edward", "sam", "emily", "jaimie", "tod", "young"]
 referral = ["-", "-", "mary", "edward", "mary", "mary", "jaimie", "edward"]
-seller = ["young", "john", "tod", "emily", "mary"]
-amount = [12, 4, 2, 5, 10]
+seller = ["young", "young"]
+amount = [4, 12]
 
 print(solution(enroll, referral, seller, amount))
