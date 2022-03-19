@@ -1,21 +1,15 @@
 function solution(s) {
-  var answer = [];
-  s = [...s]
+  let answer = [0, 0]
   
-  let change_count = 0
-  let zero_count = 0
-
-  while(s !== '1'){
-      let new_array = []
-      for (let i = 0; i < s.length; i++) {
-          if (s[i] ==='0')
-              zero_count += 1
-          else
-              new_array.push(s[i])
-      }
-      s = new_array.length.toString(2)
-      change_count += 1
+  for(;;) {
+      let after = s.split("0").join("")
+      answer[1] += s.length - after.length
+      answer[0] += 1
+      s = after.length.toString(2)
+  
+      if(s === '1')
+          break
   }
-  
-  return [change_count, zero_count];
+  return answer
+
 }
