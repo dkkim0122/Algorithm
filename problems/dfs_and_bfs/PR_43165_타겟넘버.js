@@ -1,23 +1,17 @@
 function solution(numbers, target) {
-    
-  const need_visited = [[numbers[0], 1], [-numbers[0], 1]]
-  const visited = new Array(numbers.length).fill(false)
-  let total_count = 0
+  const need_visited = [[0, 0]];
+  let total_count = 0;
   
-  while(need_visited.length) {
-      const [number, count] = need_visited.shift()
-      if (count === numbers.length) {
-          if (number === target)
-              total_count += 1
-          continue
+  function dfs(number, count) {
+      if (count < numbers.length) {
+        dfs(number + numbers[count], count + 1);
+        dfs(number - numbers[count], count + 1);
+      } else {
+        if (number === target) total_count += 1;
       }
-      
-      if (count < numbers.length){
-          need_visited.push([number + numbers[count], count + 1])
-          need_visited.push([number - numbers[count], count + 1])    
-      }
-      
   }
   
+  dfs(0,0)
+
   return total_count;
 }
