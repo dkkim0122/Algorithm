@@ -18,3 +18,9 @@ function solution(priorities, location) {
   const answer = stack.findIndex((val) => val.index === location);
   return answer + 1;
 }
+
+
+let a = 1
+for (let i = a; i<10;i++){
+  
+}
