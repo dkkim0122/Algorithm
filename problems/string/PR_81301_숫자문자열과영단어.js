@@ -1,25 +1,22 @@
 function solution(s) {
-  var answer = 0;
-  const numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-  
-  const nums = s.split(/(\d)/).filter(el => el)
-  const result = []
-  for(let num of nums) {
-      if(num.length === 1) {
-          result.push(num)
-          continue
-      }
-      let word = ''
-      while(num.length) {
-          word += num[0]
-          num = num.slice(1)
-          const idx = numbers.indexOf(word)
-          if(idx !== -1) {
-              result.push(idx)
-              word = ''
-          }
-      }
+  const words = {
+      'zero': '0',
+      'one': '1',
+      'two': '2',
+      'three': '3',
+      'four': '4',
+      'five': '5',
+      'six': '6',
+      'seven': '7',
+      'eight': '8',
+      'nine': '9',
   }
   
-  return parseInt(result.join(""));
+  for(const [key, value] of Object.entries(words)) {  // 일반 객체이므로 Object.entries 사용
+      const pattern = RegExp(key, 'g')
+      s = s.replace(pattern, value)
+  }
+  
+  
+  return parseInt(s)
 }
