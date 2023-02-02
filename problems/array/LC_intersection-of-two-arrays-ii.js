@@ -56,3 +56,31 @@ var intersect = function(nums1, nums2) {
 
   return result
 };
+
+/**
+ * O(n), Runtime 58 ms, Memory 43 MB
+ * 훨씬 이해하기 쉽고 성능도 나쁘지 않다.
+ */
+
+var intersect = function(nums1, nums2) {
+  const result = []
+  nums1 = nums1.sort((a, b) => a - b)
+  nums2 = nums2.sort((a, b) => a - b)
+
+  while (nums1.length > 0 && nums2.length > 0) {
+      if (nums1[0] === nums2[0]) {
+          result.push(nums1.shift())
+          nums2.shift()
+      }
+      
+      if (nums1[0] > nums2[0]) {
+          nums2.shift()
+      }
+
+      if (nums1[0] < nums2[0]) {
+          nums1.shift()
+      }
+  }
+
+  return result
+};
