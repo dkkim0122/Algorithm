@@ -32,3 +32,27 @@ var intersect = function(nums1, nums2) {
 
   return result
 };
+
+/**
+ * O(m+n), Runtime 71 ms, Memory 43.7 MB
+ * map은 하나만 만들고, 나머지 array를 순회하면서 result에 들어갈 숫자들을 찾는다.
+ * 소요 시간은 이 방법이 더 큰데, map을 순회하는 것이 array를 순회하는 것보다 더 빨라서 그런지는 좀 더 봐야할 것 같다.
+ */
+
+var intersect = function(nums1, nums2) {
+  const map = new Map()
+  const result = []
+
+  nums1.forEach(num => {
+      map.get(num) ? map.set(num, map.get(num) + 1) : map.set(num, 1)
+  })
+  
+  nums2.forEach((num) => {
+      if (map.get(num)) {
+        result.push(num)
+        map.set(num, map.get(num) - 1)
+      }
+  })
+
+  return result
+};
